@@ -124,6 +124,7 @@ RUN cd ${PACKAGE_DIR}/lammps/ \
       -D PKG_MANYBODY=yes \
       -D PKG_MOLECULE=yes \
       -D PKG_CLASS2=yes \
+      -D PKG_EXTRA-PAIR=yes \
       -D PKG_PYTHON=yes \
       -D PKG_ML-SNAP=yes \
       -D PKG_MGPT=yes \
