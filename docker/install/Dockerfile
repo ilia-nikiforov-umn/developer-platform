@@ -97,7 +97,6 @@ RUN apt-get update -qq \
  && apt-get install --no-install-recommends -qqy git \
  && cd ${PACKAGE_DIR}/numdifftools \
  && ${PIP} install . \
- && apt-get purge -y git \
  && apt-get clean \
  && rm -fr /var/lib/apt/lists/*
 
