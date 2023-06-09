@@ -245,20 +245,3 @@ jobs:
         run: |
           rm -rf ${{ env.IMAGE_CACHE_DIR_SYS }}
           rm -rf ${{ env.IMAGE_CACHE_DIR_GIT }}
-
-      # Finally, install additional packages to create the full image based on
-      # the minimal image
-      #
-      # https://github.com/docker/build-push-action
-      - name: Configure and push full image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: docker/${{ env.DOCKER_DIR_ADDITIONAL }}
-          file: docker/${{ env.DOCKER_DIR_ADDITIONAL }}/${{ env.DOCKERFILE_NAME }}
-          push: ${{ github.event_name != 'pull_request' }}
-          build-args: |
-            "IMAGE_MINIMAL=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}-minimal"
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          labels: ${{ steps.meta.outputs.labels }}
