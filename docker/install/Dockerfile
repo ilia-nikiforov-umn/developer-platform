@@ -131,6 +131,7 @@ RUN cd ${PACKAGE_DIR}/lammps/ \
       -D PKG_REAXFF=yes \
       -D PKG_MISC=yes \
       -D PKG_SMTBQ=yes \
+      -D PKG_CORESHELL=yes \
       ../cmake \
  && make -j2 \
  && make install \
