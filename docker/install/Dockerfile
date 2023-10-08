@@ -134,6 +134,7 @@ RUN cd ${PACKAGE_DIR}/lammps/ \
       ../cmake \
  && make -j2 \
  && make install \
+ && make install-python \
  && ln -s /usr/local/bin/lmp /usr/local/bin/lammps \
  && rm -r /usr/local/share/lammps/potentials \
  && cd ${PACKAGE_DIR} \
