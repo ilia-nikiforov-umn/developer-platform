@@ -301,6 +301,42 @@ def species_match(runner, subject):
 
     return (match, mismatch_info)
 
+def type_labels_match(runner,subject):
+    """
+    Certain types of models and tests have "atom type labels" distinct from chemical species.
+    Match on these as if they were species.
+    """
+    mismatch_info = None
+
+    # For now, we will assume that all VCs must support all type labels, and
+    # not even look for a 'species' or 'type labels' key in its kimspec (which will obviously
+    # not be required right now, either)
+    if runner.kim_code_leader.lower() == "vc":
+        match = True
+    elif (subject.atom_type_labels is not None) or (runner.atom_type_labels is not None):
+        match = True
+        runner_species_or_labels = runner.species if runner.atom_type_labels is None else runner.atom_type_labels
+        subject_species_or_labels = subject.species if subject.atom_type_labels is None else subject.atom_type_labels
+        if isinstance(runner_species_or_labels, str):
+            runner_species_or_labels = runner_species_or_labels.split()
+        if isinstance(subject_species_or_labels, str):
+            subject_species_or_labels = subject_species_or_labels.split()
+
+        for spec in runner_species_or_labels:
+            if spec not in subject_species_or_labels:
+                match = False
+                mismatch_info = (
+                    "Atom type label {} listed in kimspec.edn file of {} could not be found "
+                    "in the kimspec.edn file of {}, which indicates species or type labels {}".format(
+                        spec, runner, subject, subject_species_or_labels
+                    )
+                )
+                # Stop as soon as we have found a single unsupported species (there could be others)
+                break
+    else: # neither subject nor runner care about type labels
+        match = True
+
+    return match, mismatch_info
 
 def valid_match(runner, subject):
     """
@@ -338,6 +374,9 @@ def valid_match(runner, subject):
 
                 if match and subject_leader == "sm":
                     match, mismatch_info = simulator_match(runner, subject)
+
+                    if match:
+                        match, mismatch_info = type_labels_match(runner,subject)
 
     elif runner_leader == "vc":
         # Verification Checks must support all species, by definition, so proceed to version checks

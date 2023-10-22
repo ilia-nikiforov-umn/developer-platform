@@ -642,7 +642,11 @@ class SimulatorModel(Subject):
             )
         return self.kimspec["simulator-potential"]
 
-
+    @property
+    def atom_type_labels(self):
+        """Return optional key atom-type-labels or None"""
+        return self.kimspec.get("atom-type-labels")
+    
 # =============================================
 # Runner Objs
 # =============================================
@@ -712,6 +716,11 @@ class Test(Runner):
 
         return self.kimspec["simulator-name"]
 
+    @property
+    def atom_type_labels(self):
+        """Return optional key atom-type-labels or None"""
+        return self.kimspec.get("atom-type-labels")
+    
     def runtime_dependencies(self):
         """
         Read the DEPENDENCY_FILE (currently dependencies.edn) for the runner
